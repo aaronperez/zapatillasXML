@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Zapatillas</string>
+    <string name="action_settings">Settings</string>
+    <string name="peso">Peso:</string>
+    <string name="agregarZ">Agregar zapatilla</string>
+    <string name="editarZ">Editar zapatilla</string>
+    <string name="eliminarZ">Eliminar zapatilla</string>
+    <string name="modelo">Modelo:</string>
+    <string name="usos">Usos:</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="eliminarAsk">¿Eliminar zapatilla\?</string>
+    <string name="mensajeCancelEliminar">No se ha eliminado la zapatilla</string>
+    <string name="mensajeElementoEditado">Elemento editado</string>
+    <string name="mensajeElementoAdd">Elemento añadido</string>
+    <string name="tituloEditar">Editar zapatilla</string>
+    <string name="tituloAgregar">Agregar zapatilla</string>
+
+</resources>
