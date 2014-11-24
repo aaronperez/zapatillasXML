@@ -17,13 +17,13 @@ import java.util.ArrayList;
 /**
  * Created by 2dam on 17/10/2014.
  */
-public class Adaptador extends ArrayAdapter<Zapatillas> {
+public class Adaptador extends ArrayAdapter<Main.Zapatillas> {
     private Context contexto;
-    private ArrayList<Zapatillas> zapas;
+    private ArrayList<Main.Zapatillas> zapas;
     private int recurso;
     private LayoutInflater i;
 
-    public Adaptador(Context context, int resource, ArrayList<Zapatillas> objects) {
+    public Adaptador(Context context, int resource, ArrayList<Main.Zapatillas> objects) {
         super(context, resource, objects);
         this.contexto=context;
         this.zapas=objects;
