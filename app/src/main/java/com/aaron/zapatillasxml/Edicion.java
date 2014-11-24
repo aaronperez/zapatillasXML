@@ -20,7 +20,7 @@ public class Edicion extends Activity {
     private Spinner spinner;
     private int index;
     private EditText etMod,etCar,etPes;
-    private Main.Zapatillas z;
+    private Zapatillas z;
     private String opcion;
     private TextView titulo;
     private Button bOK;
@@ -72,17 +72,17 @@ public class Edicion extends Activity {
         Bundle bundle= new Bundle();
         bundle.putInt("index", index);
         bundle.putString("opcion", opcion);
-        Main.Zapatillas z=rellena();
+        Zapatillas z=rellena();
         bundle.putParcelable("zapa",z);
         i.putExtras(bundle);
         setResult(Activity.RESULT_OK, i);
         finish();
     }
 
-    public Main.Zapatillas rellena(){
+    public Zapatillas rellena(){
         int img=spinnerDraw();
         String c= spinner.getSelectedItem().toString()+" "+etMod.getText().toString();
-        return new Main.Zapatillas(c,etCar.getText().toString(),etPes.getText().toString(),img);
+        return new Zapatillas(c,etCar.getText().toString(),etPes.getText().toString(),img);
     }
 
     public void cancelar(View v){
