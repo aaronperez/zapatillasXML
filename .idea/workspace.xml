@@ -29,13 +29,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.aaron.zapatillasxml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ffc8eb3-87f7-4216-b30a-c4c8d6d3e407" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\AndroidStudioProjects\ZapatillasXML\app\src\main\java\com\aaron\zapatillasxml\Zapatillas.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/aaron/zapatillasxml/Adaptador.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/aaron/zapatillasxml/Adaptador.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/aaron/zapatillasxml/Edicion.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/aaron/zapatillasxml/Edicion.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/aaron/zapatillasxml/Main.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/aaron/zapatillasxml/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="8ffc8eb3-87f7-4216-b30a-c4c8d6d3e407" name="Default" comment="" />
     <ignored path="ZapatillasXML.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
