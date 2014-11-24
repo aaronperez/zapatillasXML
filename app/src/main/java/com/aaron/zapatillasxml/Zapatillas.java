@@ -23,6 +23,13 @@ public class Zapatillas implements Parcelable, Comparable<Zapatillas> {
         this.marca = marca;
     }
 
+    public Zapatillas(Parcel parcel){
+        this.modelo = parcel.readString();
+        this.caract = parcel.readString();
+        this.peso = parcel.readString();
+        this.marca =parcel.readInt();
+    }
+
     public String getModelo() {
         return modelo;
     }
@@ -89,19 +96,23 @@ public class Zapatillas implements Parcelable, Comparable<Zapatillas> {
         return 0;
     }
 
-    private void readFromParcel(Parcel in) {
-        modelo=in.readString();
-        caract=in.readString();
-        peso=in.readString();
-        marca=in.readInt();
-
-    }
-
-    @Override
+   @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(modelo);
         dest.writeString(caract);
         dest.writeString(peso);
         dest.writeInt(marca);
     }
+
+    public static final Parcelable.Creator<Zapatillas> CREATOR =
+            new Parcelable.Creator<Zapatillas>() {
+                public Zapatillas createFromParcel(Parcel parcel) {
+                    return new Zapatillas(parcel);
+                }
+
+                public Zapatillas[] newArray(int size) {
+                    return new Zapatillas[size];
+                }
+            };
+
 }

@@ -13,10 +13,10 @@
     <string name="cancelar">Cancelar</string>
     <string name="eliminar">Eliminar</string>
     <string name="eliminarAsk">¿Eliminar zapatilla\?</string>
-    <string name="mensajeCancelEliminar">No se ha eliminado la zapatilla</string>
+    <string name="mensajeCancel">No se ha hecho ningún cambio</string>
     <string name="mensajeElementoEditado">Elemento editado</string>
     <string name="mensajeElementoAdd">Elemento añadido</string>
-    <string name="tituloEditar">Editar zapatilla</string>
-    <string name="tituloAgregar">Agregar zapatilla</string>
+    <string name="tituloEditar">Editar</string>
+    <string name="tituloAgregar">Agregar</string>
 
 </resources>

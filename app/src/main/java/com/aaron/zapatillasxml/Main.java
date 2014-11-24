@@ -45,8 +45,7 @@ public class Main extends Activity {
     private ArrayList<Zapatillas> zapas = new ArrayList<Zapatillas>();
     private ListView lv;
     private Adaptador ad;
-    private Spinner spinner;
-    private int img;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,7 @@ public class Main extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_agregar) {
-            editar(0, "add");
+            edicion(0, "add");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -87,19 +86,41 @@ public class Main extends Activity {
     public void onActivityResult(int requestCode,int resultCode, Intent data){
         if (resultCode== Activity.RESULT_OK) {
             switch (requestCode){
-                case ACTIVIDAD_SEGUNDA:
-                    int index= data.getIntExtra("index",0);
+                case ACTIVIDAD_ELIMINAR:
+                    index= data.getIntExtra("index",0);
                     zapas.remove(index);
-                    ad.notifyDataSetChanged();
+                    break;
+                case ACTIVIDAD_EDITAR:
+                    index= data.getIntExtra("index",0);
+                    String opcion=data.getStringExtra("opcion");
+                    Zapatillas z=data.getParcelableExtra("zapa");
+                    if(opcion.contains("edit")){
+                        zapas.get(index).setModelo(z.getModelo());
+                        zapas.get(index).setCaract(z.getCaract());
+                        zapas.get(index).setPeso(z.getPeso());
+                        zapas.get(index).setMarca(z.getMarca());
+
+                    }
+                    else{
+                        zapas.add(z);
+                    }
+                    ordenar();
                     break;
             }
+            try {
+                escribir();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ad.notifyDataSetChanged();
         }
         else{
             Log.v("data",(data==null)+"");
-            tostada(R.string.mensajeCancelEliminar);
+            tostada(R.string.mensajeCancel);
         }
     }
     /********************Rotar*************************/
+    /*
     @Override
     protected void onSaveInstanceState(Bundle savingInstanceState) {
         super.onSaveInstanceState(savingInstanceState);
@@ -110,7 +131,7 @@ public class Main extends Activity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         zapas=(savedInstanceState.getParcelableArrayList("array"));
-    }
+    }*/
 
     /* Desplegar menú contextual*/
     @Override
@@ -127,7 +148,7 @@ public class Main extends Activity {
         AdapterView.AdapterContextMenuInfo info= (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         int index= info.position;
         if (id == R.id.action_editar) {
-            editar(index,"edit");
+            edicion(index, "edit");
             return true;
         }else if (id == R.id.action_eliminar) {
             eliminar(index);
@@ -148,122 +169,20 @@ public class Main extends Activity {
         leer();
     }
 
-    /*  Método para iniciar Spinner y escucharlo  */
-    private void iniciarSpinner(View v){
-        ArrayAdapter<CharSequence> stringArrayAdapter=ArrayAdapter.createFromResource(this,R.array.Marca,android.R.layout.simple_spinner_dropdown_item);
-        spinner =(Spinner)v.findViewById(R.id.spinnerM);
-        spinner.setAdapter(stringArrayAdapter);
+    //Ordena las zapatillas alfabéticamente
+    public void ordenar(){
+        Collections.sort(zapas);
     }
-
-
-    /* Método que convierte la posición en
-    * el spinner en la imagen que le corresponde*/
-    private int spinnerDraw(){
-        Context n=Main.this.getApplicationContext();
-        Resources resources = n.getResources();
-        String nombre=spinner.getSelectedItem().toString().toLowerCase();
-        final int resourceId = resources.getIdentifier(prepararNombre(nombre), "drawable",
-                n.getPackageName());
-        return resourceId;
-        }
-    /*
-    //rellenamos algunos elementos del ArrayList para que se vea algo
-    private void nuevas(){
-        zapas.add(new Zapatillas("Adidas Riot 5","Montaña, pronador","70-90",R.drawable.adidas));
-        zapas.add(new Zapatillas("Asics Gel Pulse 6","Asfalto, pronador","65-75", R.drawable.asics));
-        zapas.add(new Zapatillas("Nike Pegasus","Asfalto, pronador","60-80",R.drawable.nike));
-        zapas.add(new Zapatillas("New Balance 770 v4","Asfalto, pronador/neutro","70-75",R.drawable.newbalance));
-        zapas.add(new Zapatillas("Mizuno Wave Ultima 6","Asfalto, neutro","70-80",R.drawable.mizuno));
-        zapas.add(new Zapatillas("Saucony Virrata 2","Asfalto, neutro, drop 0","60-80", R.drawable.saucony));
-    }
-    */
 
     /* Mostramos un mensaje flotante a partir de un recurso string*/
     private void tostada(int s){
         Toast.makeText(this, getText(s), Toast.LENGTH_SHORT).show();
     }
 
-    //Ordena las zapatillas alfabéticamente
-    public void ordenar(){
-        Collections.sort(zapas);
-    }
-
-    //Recoge el nombre del spinner y lo deja sin espacios
-    public String prepararNombre(String n){
-        if(n.contains(" ")){
-            n=n.substring(0,n.indexOf(" "))+n.substring(n.indexOf(" ")+1,n.length());
-        }
-        return n;
-    }
-
 
     /*        Menús          */
     /*************************/
-    public void editar(int x,String opcion){
-        final int x2=x;
-        AlertDialog.Builder alert= new AlertDialog.Builder(this);
-        LayoutInflater inflater= LayoutInflater.from(this);
-        final View vista = inflater.inflate(R.layout.edicion, null);
-        alert.setView(vista);
-        iniciarSpinner(vista);
-        final EditText et1=(EditText)vista.findViewById(R.id.etModelo);
-        final EditText et2=(EditText)vista.findViewById(R.id.etUsos);
-        final EditText et3=(EditText)vista.findViewById(R.id.etPeso);
-        if(opcion.contains("edit")) {
-            alert.setTitle(getText(R.string.tituloEditar));
-            et1.setText(zapas.get(x2).getModelo());
-            et2.setText(zapas.get(x2).getCaract());
-            et3.setText(zapas.get(x2).getPeso());
-            for (int i = 0; i < 7; i++) {
-                if (spinner.getItemAtPosition(i).toString().substring(0, 3).equals(zapas.get(x2).getModelo().substring(0, 3))) {
-                    spinner.setSelection(i);
-                    break;
-                }
-            }
-            zapas.get(x2).getModelo().substring(0, 3);
-            alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    zapas.get(x2).setModelo(et1.getText().toString());
-                    zapas.get(x2).setMarca(spinnerDraw());
-                    zapas.get(x2).setCaract(et2.getText().toString());
-                    zapas.get(x2).setPeso(et3.getText().toString());
-                    img=spinnerDraw();
-                    zapas.get(x2).setMarca(img);
-                    ordenar();
-                    ad.notifyDataSetChanged();
-                    tostada(R.string.mensajeElementoEditado);
-                    try {
-                        escribir();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-        else{
-            alert.setTitle(getText(R.string.tituloAgregar));
-            alert.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    int img=spinnerDraw();
-                    String c= spinner.getSelectedItem().toString()+" "+et1.getText().toString();
-                    zapas.add(new Zapatillas(c,et2.getText().toString(),et3.getText().toString(),img));
-                    ordenar();
-                    ad.notifyDataSetChanged();
-                    tostada(R.string.mensajeElementoAdd);
-                    try {
-                        escribir();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-        alert.setNegativeButton(getText(R.string.cancelar),null);
-        alert.show();
-    }
-
-
-    private final int ACTIVIDAD_SEGUNDA = 1;
+    private final int ACTIVIDAD_ELIMINAR = 1;
     public void eliminar(int index){
         Intent i = new Intent(this,Eliminar.class);
         Bundle b = new Bundle();
@@ -273,8 +192,27 @@ public class Main extends Activity {
         b.putInt("img", zapas.get(index).getMarca());
         b.putInt("index", index);
         i.putExtras(b);
-        startActivityForResult(i, ACTIVIDAD_SEGUNDA);
+        startActivityForResult(i, ACTIVIDAD_ELIMINAR);
     }
+
+    private final int ACTIVIDAD_EDITAR = 2;
+    public void edicion(int index,String opcion){
+        Intent i = new Intent(this,Edicion.class);
+        Bundle b = new Bundle();
+        Zapatillas z;
+        if(zapas.size()>0){
+            z=zapas.get(index);
+        }
+        else{
+            z=new Zapatillas();
+        }
+        b.putString("opcion",opcion);
+        b.putInt("index", index);
+        b.putParcelable("zapa",z);
+        i.putExtras(b);
+        startActivityForResult(i, ACTIVIDAD_EDITAR);
+    }
+
 
     /********XML***********/
     public void escribir() throws IOException {
@@ -317,15 +255,12 @@ public class Main extends Activity {
                 if(etiqueta.compareTo("zapatilla")==0){}
                 if(etiqueta.compareTo("modelo")==0){
                     mod = lectorxml.nextText();
-                    Log.v("mod",mod);
                 }
                 if(etiqueta.compareTo("caracteristicas")==0){
                     car = lectorxml.nextText();
-                    Log.v("car",car);
                 }
                 if(etiqueta.compareTo("peso")==0){
                     pes = lectorxml.nextText();
-                    Log.v("pes", pes);
                 }
                 if(etiqueta.compareTo("marca")==0){
                     mar = lectorxml.nextText();

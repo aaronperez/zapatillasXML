@@ -27,6 +27,9 @@
             android:name=".Eliminar"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".Edicion"
+            android:label="@string/app_name"/>
     </application>
 
 </manifest>
